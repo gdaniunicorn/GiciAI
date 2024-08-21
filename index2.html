@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GicziAI</title>
 <style>body{background:rgb(49, 49, 49);margin:0;overflow:clip;}p{margin:0;}
-#name{font-size:30px;padding:10px;color:white;text-align:center;position:absolute;background:rgb(49,49,49);width:100vw;box-sizing:border-box;box-shadow:0 0 6px 2px black;z-index:99;}
-#chat{height:calc(100vh - 50px);width:100vw;padding:65px 25px 0;box-sizing:border-box;overflow-y:auto;overflow-x:clip;background:rgb(87, 87, 87);scroll-behavior:smooth
+#name{font-size:30px;padding:10px;color:white;text-align:center;position:absolute;background:rgb(49,49,49);width:100vw;box-sizing:border-box;z-index:49;box-shadow:0 0 5px 5px black;}
+#chat{height:calc(100vh - 50px);width:100vw;padding:70px 25px 0;box-sizing:border-box;overflow-y:auto;overflow-x:clip;background:rgb(87, 87, 87);scroll-behavior:smooth
 ;&::-webkit-scrollbar{width:6px;}
 ;&::-webkit-scrollbar-thumb{background-color:rgb(63, 63, 63);}}
 .chat1,.chat2{width:calc(100vw - 50px);display:flex;justify-content:flex-start;height:auto
@@ -17,11 +17,16 @@
 #inputfield{height:60px;display:flex;height:50px;justify-content:center;align-items:center; }
 input{height:30px;font-size:20px;width:clamp(100px, 60vw, 400px);&:focus{outline:0;}}
 button{height:35px;width:fit-content;font-size:20px;}
+h4{font-size:16px;color:#f090ff;margin:40px 0 0 0;width:100vw;text-align:center;position:absolute;background:rgb(49, 49, 49);z-index:50;}
+h3{font-size:10px;color:red;width:100vw;text-align:center;position:absolute;background:rgb(49, 49, 49);z-index:50;font-weight:bolder;font-family:monospace;margin:0;
+margin-top:calc(100vh - 60px);padding:2px;box-sizing:border-box;}
 </style>
 </head>
 <body>
 
 <p id="name">GiciAI</p>
+<h4>nem családbarát</h4>
+<h3>Semmit ne vegyél komolyan az üzenetek közül!</h3>
 <div id="chat">
         <div class="chat1">
             <div>
@@ -37,21 +42,34 @@ button{height:35px;width:fit-content;font-size:20px;}
     </div>
 </div>
 
-<script>const answers = ["Üdvözöllek! Miben lehetek a segítségedre?","Tudod-e, hogy mennyi 1+1?","Ügyes vagy! :D","Gratulálok!",":3","Bocsánatot kérek! :(","Teljesen egyetértek veled! Másoknak is így kéne gondolkozniuk!",
+<script>var answers = ["Üdvözöllek! Miben lehetek a segítségedre?","Tudod-e, hogy mennyi 1+1?","Ügyes vagy! :D","Gratulálok!",":3","Bocsánatot kérek! :(","Teljesen egyetértek veled! Másoknak is így kéne gondolkozniuk!",
 "Te is szereted az almát?","Hogy vagy, barátom? :D","Na ide figyelj! Ilyet meg egyszer nehogy meghalljak! >:(","Ejnye-bejnye!","A bicikli eladó még? Szeretnék érdeklődni az állapota felől! :)"
 ,"Szia én egy mesterségtelen intelligencia vagyok. Nem tudok neked segíteni mivel a készítőm agya olyan üres mint a készítőm agya. :D","Error code 404: no wifi connection. Please xcf$ix'%4532","rzbsj@v}zbfs$iuc[sdu(c?"
 ,"Szeretnék egy tehenet... Te tisztára hasonlítasz egyhez! :O","Nem.","Igen","Az atomok szerkezete valójában csak egy kitaláció","Forrás: Wikipédia.hu/old-meg-magad","Valójában csak az időd pazarlod."
 ,"Tudtad? Egy átlagos ember képes nagyobbat ugrani mint az Eiffel torony! Ez azért van mert az Eiffel torony nem tud ugrani.","Te is rajongsz az olyan állatokért amik élnek? :O","Fúúújj :O",":o",":("
 ,"Az szuper!","Micsoda?!","Ennek örülök! :)","anyád","buzi","Le a migránsokkal!","Csakis a fidesz!","A melegeket ki kéne irtani. Egyetértesz? :)","niga","A feketebőrű emberek részei a társadalomnak! Csak nem a miénknek :D,"
 ,"Menj a rákba!","Chill dude","Mekkora a kukid? :3","Nemtom, kérdezd anyád.","Rohadj meg.","Nem kérdeztem.","Meleg van,vagy csak te vagy?","...","Viszlát.", ];
+let past = [],i=0;
 function send(){let input=document.getElementById("input").value;
     if (input!=""){
+        var num = (Math.random()*(answers.length-1)).toFixed(0);
         document.getElementById("chat").innerHTML+=`
-        <div class="chat2"><div><p>${input}</p></div></div><div class="chat1"><div><p>${answers[(Math.random()*(answers.length-1)).toFixed(0)]}<p></div></div> `;
+        <div class="chat2"><div><p>${input}</p></div></div><div class="chat1"><div><p>${answers[num]}<p></div></div> `;
         document.getElementById("input").value="";
+        past.push(answers[num]+(i+3).toString());
+        answers.splice(num,1);
+        for (let n=0;n<past.length;n++){
+            var val=past[n];
+            if(val.slice(val.length-i.toString().length,val.length)==i.toString()){
+                answers.push(val.slice(0,val.length-i.toString().length));
+                past.splice(past.indexOf(val),1);
+            }
+        }
+        i++;
+        document.getElementById('chat').scrollTo(0,9999999,"smooth");
     }
-    document.getElementById('chat').scrollTo(0,9999999,"smooth");
 }
+
 window.addEventListener(("keydown"), function(e){
     if(e.key=='Enter'){
         send();
