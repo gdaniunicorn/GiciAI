@@ -53,7 +53,7 @@ function send(){let input=document.getElementById("input").value;
         document.getElementById("chat").innerHTML+=`
         <div class="chat2"><div><p>${input}</p></div></div><div class="chat1"><div><p>${answers[num]}<p></div></div> `;
         document.getElementById("input").value="";
-        past.push(answers[num]+(i+3).toString());
+        past.push(answers[num]+(i+6).toString());
         answers.splice(num,1);
         for (let n=0;n<past.length;n++){
             var val=past[n];
